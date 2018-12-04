@@ -1,9 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-mod part1;
-mod part2;
-
 const INPUT_BASE_PATH: &str = "./input/";
 
 fn main() {
@@ -24,6 +21,38 @@ fn read_file(name: &str) -> std::vec::Vec<i32> {
     buffer.lines()
         .filter_map(|line| line.ok().and_then(|l| l.parse().ok()))
         .collect()
+}
+
+mod part1 {
+    type VecType = Vec<i32>;
+
+    pub fn solution(input: &VecType) -> i32 {
+        input.iter().sum()
+    }
+}
+
+mod part2 {
+    use std::collections::HashSet;
+
+    type VecType = Vec<i32>;
+
+    pub fn solution(input: &VecType) -> i32 {
+        let mut freqs: HashSet<_> = [0].iter()
+            .cloned()
+            .collect();
+
+        let mut accumulator = 0;
+
+        for freq in input.iter().cycle() {
+            accumulator += freq;
+
+            if !freqs.insert(accumulator) {
+                return accumulator;
+            }
+        }
+
+        0
+    }
 }
 
 #[cfg(test)]
